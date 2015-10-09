@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="grey">#cccccc</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="Movies_light_grey">#646464</color>
+    <color name="green">#009688</color>
+    <color name="blue">#0288D1</color>
+
+</resources>

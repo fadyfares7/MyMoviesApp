@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <item
+        android:title="SortBy"
+        android:id="@+id/sortby">
+        <menu>
+            <item
+                android:id="@+id/menuSortPopular"
+                android:title="Sort by Most Popular"
+                android:onClick="onOptionsItemSelected"
+                />
+            <item
+                android:id="@+id/menuSortRating"
+                android:title="Sort by highest rating"
+                android:onClick="onOptionsItemSelected"/>
+            <item
+                android:id="@+id/menufavorite"
+                android:title="Favorites"
+                android:onClick="onOptionsItemSelected"/>
+        </menu>
+    </item>
+</menu>
