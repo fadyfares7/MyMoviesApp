@@ -74,9 +74,9 @@ public class DetailsActivityFragment extends Fragment {
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
         // If onLoadFinished happens before this, we can go ahead and set the share intent now.
-//        if (mTrailers.get(0) != null) {
-//            mShareActionProvider.setShareIntent(createShareForecastIntent());
-//        }
+        if (mTrailers.get(0) != null) {
+            mShareActionProvider.setShareIntent(createShareForecastIntent());
+        }
     }
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override

@@ -117,7 +117,6 @@ You will extract the movie id from this request. You will need this in subsequen
                 Toast.makeText(getActivity(), "couldn't fetch the data", Toast.LENGTH_SHORT).show();
             }
 
-
         return v;
     }
 
