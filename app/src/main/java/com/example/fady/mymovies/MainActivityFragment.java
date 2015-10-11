@@ -34,8 +34,7 @@ import java.util.Set;
  */
 public class MainActivityFragment extends Fragment implements OnDataFetch{
     private final String LOG_TAG = MainActivity.class.getSimpleName();
-    final String ID ="5739f885c31c94f3a4e8a7922b2d7453";
-    //final String ID ="PUT_YOUR_KEY";
+    final String ID ="PUT_YOUR_KEY";
     /*get your Id from movies api
  To fetch popular movies, you will use the API from themoviedb.org.
 If you don’t already have an account, you will need to create one in order to request an API Key.
