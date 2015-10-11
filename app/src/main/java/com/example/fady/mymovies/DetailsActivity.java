@@ -11,7 +11,26 @@ public class DetailsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+        if (savedInstanceState == null) {
 
+            Bundle args = new Bundle();
+            args.putInt("mId", getIntent().getIntExtra("Intent_mId", 0));
+            args.putInt("mTrailer_id",getIntent().getIntExtra("Intent_mTrailer_id",0));
+            args.putString("mTitle",getIntent().getStringExtra("Intent_mTitle"));
+            args.putString("mOverview", getIntent().getStringExtra("Intent_mOverview"));
+            args.putString("mReleaseDate", getIntent().getStringExtra("Intent_mReleaseDate"));
+            args.putDouble("mAverageVote", getIntent().getDoubleExtra("Intent_mAverageVote", 0));
+            args.putString("mPosterUrl", getIntent().getStringExtra("Intent_mPosterUrl"));
+            args.putStringArrayList("Trailers",getIntent().getStringArrayListExtra("Intent_Trailers"));
+            args.putParcelableArrayList("ReviewArr", getIntent().getParcelableArrayListExtra("Intent_ReviewArr"));
+
+            DetailsActivityFragment fragment = new DetailsActivityFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.weather_detail_container, fragment)
+                    .commit();
+        }
     }
 
 

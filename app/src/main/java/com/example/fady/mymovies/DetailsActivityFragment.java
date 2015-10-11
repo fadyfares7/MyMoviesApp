@@ -74,9 +74,9 @@ public class DetailsActivityFragment extends Fragment {
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
         // If onLoadFinished happens before this, we can go ahead and set the share intent now.
-        if (mTrailers.get(0) != null) {
-            mShareActionProvider.setShareIntent(createShareForecastIntent());
-        }
+//        if (mTrailers.get(0) != null) {
+//            mShareActionProvider.setShareIntent(createShareForecastIntent());
+//        }
     }
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -84,186 +84,185 @@ public class DetailsActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         ImageLoader imageLoader = ImageLoader.getInstance();
         View view= inflater.inflate(R.layout.fragment_details, container, false);
-        Intent intent = getActivity().getIntent();
-        mID = intent.getIntExtra("Myid", 0);
-        mTitle=intent.getStringExtra("mTitle");
-        mReleaseDate=intent.getStringExtra("mReleaseDate");
-        mVoteAverage=intent.getDoubleExtra("mAverageVote", 0);
-        mOverView=intent.getStringExtra("mOverview");
-        mPosterUrl=intent.getStringExtra("mPosterUrl");
-        mTrailerID=intent.getIntExtra("mTrailer_id",0);
-        mTrailers=intent.getStringArrayListExtra("Trailers");
-        tinydb.TinyDBContext(getActivity());
-        AllReviews=intent.getParcelableArrayListExtra("ReviewArr");
-        TextView title=(TextView)view.findViewById(R.id.title);
-        title.setText(mTitle);
-        TextView date=(TextView)view.findViewById(R.id.data);
-        TextView rating=(TextView)view.findViewById(R.id.rate);
-        TextView overview=(TextView)view.findViewById(R.id.overview);
-        overview.setText(mOverView);
-        rating.setText(mVoteAverage.toString()+"/10");
-        date.setText(mReleaseDate.substring(0, 4));
-        mFavID=PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt("FavID",0);
-        ImageView poster=(ImageView) view.findViewById(R.id.poster);
-        Bitmap bmp = imageLoader.loadImageSync(mPosterUrl);
-        poster.setScaleType(ImageView.ScaleType.FIT_XY);
-       poster.setImageBitmap(bmp);
-        favMovieIds=tinydb.getListString("FavListIDs");
-        for(int i=0;i<mTrailers.size();i++)
-        {
-            Log.v(LOG_TAG,mTrailers.get(i));
-        }
-        final LinearLayout lm = (LinearLayout) view.findViewById(R.id.trailersList);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            if (savedInstanceState != null) {
+                mID = savedInstanceState.getInt("mId", 0);
+                mTitle = savedInstanceState.getString("mTitle");
+                mReleaseDate = savedInstanceState.getString("mReleaseDate");
+                mVoteAverage = savedInstanceState.getDouble("mAverageVote", 0);
+                mOverView = savedInstanceState.getString("mOverview");
+                mPosterUrl = savedInstanceState.getString("mPosterUrl");
+                mTrailerID = savedInstanceState.getInt("mTrailer_id", 0);
+                mTrailers = savedInstanceState.getStringArrayList("Trailers");
+                AllReviews = savedInstanceState.getParcelableArrayList("ReviewArr");
 
-        for(int j=0;j<mTrailers.size();j++)
-        {
-            // Create LinearLayout
-            LinearLayout ll = new LinearLayout(getActivity(),null, android.R.attr.listSeparatorTextViewStyle);
-            ll.setOrientation(LinearLayout.HORIZONTAL);
-            ll.setPadding(0,16,0,16);
+            }
+            else {
+                mID = arguments.getInt("mId", 0);
+                mTitle = arguments.getString("mTitle");
+                mReleaseDate = arguments.getString("mReleaseDate");
+                mVoteAverage = arguments.getDouble("mAverageVote", 0);
+                mOverView = arguments.getString("mOverview");
+                mPosterUrl = arguments.getString("mPosterUrl");
+                mTrailerID = arguments.getInt("mTrailer_id", 0);
+                mTrailers = arguments.getStringArrayList("Trailers");
+                AllReviews = arguments.getParcelableArrayList("ReviewArr");
+            }
+            tinydb.TinyDBContext(getActivity());
+            TextView title = (TextView) view.findViewById(R.id.title);
+            title.setText(mTitle);
+            TextView date = (TextView) view.findViewById(R.id.data);
+            TextView rating = (TextView) view.findViewById(R.id.rate);
+            TextView overview = (TextView) view.findViewById(R.id.overview);
+            overview.setText(mOverView);
+            rating.setText(mVoteAverage.toString() + "/10");
+            date.setText(mReleaseDate.substring(0, 4));
+            mFavID = PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt("FavID", 0);
+            ImageView poster = (ImageView) view.findViewById(R.id.poster);
+            Bitmap bmp = imageLoader.loadImageSync(mPosterUrl);
+            poster.setScaleType(ImageView.ScaleType.FIT_XY);
+            poster.setImageBitmap(bmp);
+
+            favMovieIds = tinydb.getListString("FavListIDs");
+            for (int i = 0; i < mTrailers.size(); i++) {
+                Log.v(LOG_TAG, mTrailers.get(i));
+            }
+            final LinearLayout lm = (LinearLayout) view.findViewById(R.id.trailersList);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+
+            for (int j = 0; j < mTrailers.size(); j++) {
+                // Create LinearLayout
+                LinearLayout ll = new LinearLayout(getActivity(), null, android.R.attr.listSeparatorTextViewStyle);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+                ll.setPadding(0, 16, 0, 16);
 
 
-            // Create Button
-            final Button btn = new Button(getActivity());
-            // Give button an ID
-            btn.setId(j + 1);
+                // Create Button
+                final Button btn = new Button(getActivity());
+                // Give button an ID
+                btn.setId(j + 1);
 //            btn.setText("Add To Cart");
-            btn.setBackground(getActivity().getResources().getDrawable(R.drawable.icon_play));
+                btn.setBackground(getActivity().getResources().getDrawable(R.drawable.icon_play));
 
-            // set the layoutParams on the button
-            btn.setLayoutParams(new LinearLayout.LayoutParams(
-                    LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT));
+                // set the layoutParams on the button
+                btn.setLayoutParams(new LinearLayout.LayoutParams(
+                        LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT));
 
-            final int index = j;
-            // Set click listener for button
-            btn.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
+                final int index = j;
+                // Set click listener for button
+                btn.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
 
-                    Log.i("TAG", "index :" + index);
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailers.get(index))));
+                        Log.i("TAG", "index :" + index);
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailers.get(index))));
+                    }
+                });
+
+                //Add button to LinearLayout
+                ll.addView(btn);
+                //Add button to LinearLayout defined in XML
+                lm.addView(ll);
+
+                // Create TextView
+                TextView trailerNum = new TextView(getActivity());
+                trailerNum.setText("Trailer" + Integer.toString(j + 1));
+                trailerNum.setLayoutParams(new LinearLayout.LayoutParams(
+                        LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT, 3.0f));
+                trailerNum.setTextColor(getActivity().getResources().getColor(R.color.Movies_light_grey));
+                trailerNum.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
+                trailerNum.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+                ll.addView(trailerNum);
+
+            }
+            final LinearLayout Review_lm = (LinearLayout) view.findViewById(R.id.ReviewList);
+
+            for (int j = 0; j < AllReviews.size(); j++) {
+                // Create LinearLayout
+                LinearLayout ll = new LinearLayout(getActivity(), null, android.R.attr.listSeparatorTextViewStyle);
+                ll.setOrientation(LinearLayout.VERTICAL);
+                ll.setPadding(0, 16, 0, 16);
+
+
+                // Create TextView
+                TextView author = new TextView(getActivity());
+                author.setText("author: " + AllReviews.get(j).getAuthor());
+                author.setLayoutParams(new LinearLayout.LayoutParams(
+                        LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT));
+                author.setTextColor(getActivity().getResources().getColor(R.color.blue));
+                author.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
+                author.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+                ll.addView(author);
+
+                TextView content = new TextView(getActivity());
+                content.setText(AllReviews.get(j).getContent());
+                content.setLayoutParams(new LinearLayout.LayoutParams(
+                        LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT));
+                content.setTextColor(getActivity().getResources().getColor(R.color.Movies_light_grey));
+                content.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
+                content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+                ll.addView(content);
+                Review_lm.addView(ll);
+            }
+
+            final ArrayList<String> set = new ArrayList<>();
+            set.add(Integer.toString(mTrailerID));
+            set.add(mTitle);
+            set.add(mPosterUrl);
+            set.add(mOverView);
+            set.add(mReleaseDate);
+            set.add(Double.toString(mVoteAverage));
+            set.add(mPosterUrl);
+
+            final ToggleButton toggle = (ToggleButton) view.findViewById(R.id.favorite);
+            int star = PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt("FavStar" + mTrailerID, 0);
+            if (star == 1)
+                toggle.setChecked(true);
+            else
+                toggle.setChecked(false);
+
+
+            toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    int x;
+                    if (isChecked) {
+                        // The toggle is enabled
+                        Toast.makeText(getActivity(), "This movie is added to favorite", Toast.LENGTH_SHORT).show();
+
+                        PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putInt("FavStar" + mTrailerID, 1).commit();//saving last state for Star button
+                        tinydb.putListString("FavList" + mTrailerID, set);
+                        favMovieIds.add(Integer.toString(mTrailerID));
+                        for (int k = 0; k < favMovieIds.size(); k++) {
+                            Log.v(LOG_TAG, "favList contains: " + favMovieIds.get(k));
+                        }
+                        tinydb.putListString("FavListIDs", favMovieIds);
+                        toggle.setChecked(true);
+                        logprint();
+
+                    } else {
+                        // The toggle is disabled
+                        PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putInt("FavStar" + mTrailerID, 0).commit();//saving last state for Star button
+
+                        tinydb.remove("FavList" + mTrailerID);
+                        favMovieIds.remove(Integer.toString(mTrailerID));
+                        for (int k = 0; k < favMovieIds.size(); k++) {
+                            Log.v(LOG_TAG, "favList contains: " + favMovieIds.get(k));
+                        }
+                        tinydb.putListString("FavListIDs", favMovieIds);
+                        toggle.setChecked(false);
+                        Toast.makeText(getActivity(), "This movie is removed from favorite", Toast.LENGTH_SHORT).show();
+                        logprint();
+                    }
                 }
             });
-
-            //Add button to LinearLayout
-            ll.addView(btn);
-            //Add button to LinearLayout defined in XML
-            lm.addView(ll);
-
-            // Create TextView
-            TextView trailerNum = new TextView(getActivity());
-            trailerNum.setText("Trailer" + Integer.toString(j + 1));
-            trailerNum.setLayoutParams(new LinearLayout.LayoutParams(
-                    LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT, 3.0f));
-            trailerNum.setTextColor(getActivity().getResources().getColor(R.color.Movies_light_grey));
-            trailerNum.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
-            trailerNum.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);;
-            ll.addView(trailerNum);
-
         }
-        final LinearLayout Review_lm = (LinearLayout) view.findViewById(R.id.ReviewList);
-
-        for(int j=0;j<AllReviews.size();j++)
-        {
-            // Create LinearLayout
-            LinearLayout ll = new LinearLayout(getActivity(),null, android.R.attr.listSeparatorTextViewStyle);
-            ll.setOrientation(LinearLayout.VERTICAL);
-            ll.setPadding(0,16,0,16);
-
-
-            // Create TextView
-            TextView author = new TextView(getActivity());
-            author.setText("author: " + AllReviews.get(j).getAuthor());
-            author.setLayoutParams(new LinearLayout.LayoutParams(
-                    LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT));
-            author.setTextColor(getActivity().getResources().getColor(R.color.blue));
-            author.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
-            author.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);;
-            ll.addView(author);
-
-            TextView content = new TextView(getActivity());
-            content.setText(AllReviews.get(j).getContent());
-            content.setLayoutParams(new LinearLayout.LayoutParams(
-                    LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT));
-            content.setTextColor(getActivity().getResources().getColor(R.color.Movies_light_grey));
-            content.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
-            content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);;
-            ll.addView(content);
-            Review_lm.addView(ll);
-        }
-//        final Set<String> set = new HashSet<String>();
-//        set.add(Integer.toString(mTrailerID));
-//        set.add(mTitle);
-//        set.add(mPosterUrl);
-//        set.add(mOverView);
-//        set.add(mReleaseDate);
-//        set.add(Double.toString(mVoteAverage));
-        final ArrayList<String> set=new ArrayList<>();
-        set.add(Integer.toString(mTrailerID));
-        set.add(mTitle);
-        set.add(mPosterUrl);
-        set.add(mOverView);
-        set.add(mReleaseDate);
-        set.add(Double.toString(mVoteAverage));
-
-        final ToggleButton toggle = (ToggleButton) view.findViewById(R.id.favorite);
-        int star=PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt("FavStar"+mTrailerID,0);
-        if(star==1)
-            toggle.setChecked(true);
-        else
-            toggle.setChecked(false);
-
-
-        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int x;
-                if (isChecked) {
-                    // The toggle is enabled
-                    Toast.makeText(getActivity(), "This movie is added to favorite", Toast.LENGTH_SHORT).show();
-
-                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putInt("FavStar" + mTrailerID, 1).commit();//saving last state for Star button
-//                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putStringSet("FavList" + mFavID, set).commit();
-                    tinydb.putListString("FavList" + mTrailerID, set);
-                    favMovieIds.add(Integer.toString(mTrailerID));
-                    for(int k=0;k<favMovieIds.size();k++)
-                    {
-                        Log.v(LOG_TAG,"favList contains: "+favMovieIds.get(k));
-                    }
-                    tinydb.putListString("FavListIDs", favMovieIds);
-                    toggle.setChecked(true);
-//                    mFavID++;
-//                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putInt("FavID", mFavID).commit();//setting an Id for each favorite movie
-
-                    logprint();
-
-                } else {
-                    // The toggle is disabled
-                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putInt("FavStar" + mTrailerID, 0).commit();//saving last state for Star button
-
-                    tinydb.remove("FavList" + mTrailerID);
-                    favMovieIds.remove(Integer.toString(mTrailerID));
-                    for(int k=0;k<favMovieIds.size();k++)
-                    {
-                        Log.v(LOG_TAG,"favList contains: "+favMovieIds.get(k));
-                    }
-                    tinydb.putListString("FavListIDs", favMovieIds);
-                    toggle.setChecked(false);
-
-//                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putInt("FavID", mFavID).commit();//setting an Id for each favorite movie
-//                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().remove("FavList" + mFavID).commit();
-
-
-                    Toast.makeText(getActivity(), "This movie is removed from favorite", Toast.LENGTH_SHORT).show();
-                    logprint();
-                }
-            }
-        });
 
         return view;
     }
@@ -274,10 +273,25 @@ public class DetailsActivityFragment extends Fragment {
         shareIntent.putExtra(Intent.EXTRA_TEXT,mTrailers.get(0));
         return shareIntent;
     }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putInt("mId", mID);
+        savedInstanceState.putInt("mTrailer_id",mTrailerID);
+        savedInstanceState.putString("mTitle",mTitle);
+        savedInstanceState.putString("mOverview", mOverView);
+        savedInstanceState.putString("mReleaseDate", mReleaseDate);
+        savedInstanceState.putDouble("mAverageVote", mVoteAverage);
+        savedInstanceState.putString("mPosterUrl", mPosterUrl);
+        savedInstanceState.putStringArrayList("Trailers",mTrailers);
+        savedInstanceState.putParcelableArrayList("ReviewArr", AllReviews);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void logprint()
     {
-//      int x=PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt("FavID",0);
         ArrayList<String> tempId=tinydb.getListString("FavListIDs");
         for(int i=0;i<tempId.size();i++) {
 

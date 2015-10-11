@@ -34,7 +34,8 @@ import java.util.Set;
  */
 public class MainActivityFragment extends Fragment implements OnDataFetch{
     private final String LOG_TAG = MainActivity.class.getSimpleName();
-    final String ID ="PUT_YOUR_KEY";
+    final String ID ="5739f885c31c94f3a4e8a7922b2d7453";
+    //final String ID ="PUT_YOUR_KEY";
     /*get your Id from movies api
  To fetch popular movies, you will use the API from themoviedb.org.
 If you don’t already have an account, you will need to create one in order to request an API Key.
@@ -65,13 +66,11 @@ You will extract the movie id from this request. You will need this in subsequen
     private ListAdapter custom_adapter=null;
     private GridView mgrid;
     private int mclickedId;
-    ArrayList<MoviePic> MoviesArrayList = new ArrayList<MoviePic>();
-    ArrayList<MoviePic> Popular_MoviesArrayList = new ArrayList<MoviePic>();
-    ArrayList<MoviePic> Rated_MoviesArrayList = new ArrayList<MoviePic>();
-    ArrayList<MoviePic> Fav_MoviesArrayList = new ArrayList<MoviePic>();
-
+    ArrayList<MoviePic> MoviesArrayList = new ArrayList<>();
+    ArrayList<MoviePic> Fav_MoviesArrayList = new ArrayList<>();
     ArrayList<String> AllTraillers=new ArrayList<>();
     ArrayList<Review> AllReviews=new ArrayList<>();
+    private boolean inTwopane;
     public MainActivityFragment() {
     }
     @Override
@@ -91,6 +90,7 @@ You will extract the movie id from this request. You will need this in subsequen
 
         ConfigImgLib();
       View v=inflater.inflate(R.layout.fragment_main, container, false);
+
         mgrid = (GridView) v.findViewById(R.id.gridview);
         tinydb.TinyDBContext(getActivity());
         if (BuildMoviesUrl1() != null) {
@@ -104,6 +104,7 @@ You will extract the movie id from this request. You will need this in subsequen
                 custom_adapter = new ListAdapter(getActivity(), R.layout.movieitem, MoviesArrayList);
 
                 mgrid.setAdapter(custom_adapter);
+
                 mgrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                        Trailers_id=MoviesArrayList.get(position).getId();
@@ -116,8 +117,11 @@ You will extract the movie id from this request. You will need this in subsequen
                 Toast.makeText(getActivity(), "couldn't fetch the data", Toast.LENGTH_SHORT).show();
             }
 
+
         return v;
     }
+
+
     public void ReviewExecute()
     {
         FetchReviewsTask test=new FetchReviewsTask(getActivity(),Trailers_id);
@@ -172,6 +176,7 @@ You will extract the movie id from this request. You will need this in subsequen
             tempMov.setOverview(movie.get(3));
             tempMov.setRelease_date(movie.get(4));
             tempMov.setVote_average(Double.parseDouble(movie.get(5)));
+            tempMov.setPosterUrl(movie.get(6));
 
             Fav_MoviesArrayList.add(tempMov);
         }
@@ -243,6 +248,13 @@ private void ConfigImgLib()
         }
 
     }
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(int ID,int Trailer_id,String Title,String overview,String ReleaseDate,Double AverageVote,String posterURL,ArrayList<String> allTraillers,ArrayList<Review> allReviews);
+    }
+
     @Override
     public void onDataFetched(ArrayList<?> data,String Tag) {
         ArrayList<MoviePic> movie=(ArrayList<MoviePic>) data;
@@ -276,18 +288,11 @@ private void ConfigImgLib()
     public void onReviewDataFetched(ArrayList<?> data) {
         AllReviews.clear();
         AllReviews= (ArrayList<Review>) data;
-        Intent i=new Intent(getActivity(),DetailsActivity.class);
-        i.putExtra("mId", mclickedId);
-        i.putExtra("mTrailer_id", Trailers_id);
 
-        i.putExtra("mTitle",MoviesArrayList.get(mclickedId).getOriginal_title());
-        i.putExtra("mOverview",MoviesArrayList.get(mclickedId).getOverview());
-        i.putExtra("mReleaseDate",MoviesArrayList.get(mclickedId).getRelease_date());
-        i.putExtra("mAverageVote", MoviesArrayList.get(mclickedId).getVote_average());
-        i.putExtra("mPosterUrl", MoviesArrayList.get(mclickedId).getPosterUrl());
-        i.putStringArrayListExtra("Trailers", AllTraillers);
-        i.putParcelableArrayListExtra("ReviewArr", AllReviews);
-        getActivity().startActivity(i);
+        ((Callback) getActivity())
+                .onItemSelected(mclickedId,Trailers_id,MoviesArrayList.get(mclickedId).getOriginal_title(),MoviesArrayList.get(mclickedId).getOverview(),
+                        MoviesArrayList.get(mclickedId).getRelease_date(),MoviesArrayList.get(mclickedId).getVote_average(),
+                        MoviesArrayList.get(mclickedId).getPosterUrl(),AllTraillers,AllReviews);
 
     }
 
@@ -300,7 +305,7 @@ private void ConfigImgLib()
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game state
-        savedInstanceState.putParcelableArrayList("my_list", (ArrayList<? extends Parcelable>) MoviesArrayList);
+        savedInstanceState.putParcelableArrayList("my_list",MoviesArrayList);
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
@@ -312,10 +317,7 @@ private void ConfigImgLib()
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-        if(id==R.id.sortby)
-        {
 
-        }
         if (id == R.id.menuSortPopular) {
 
             PopularMoviesExecute();

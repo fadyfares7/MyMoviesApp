@@ -43,8 +43,6 @@ public class FetchMovieTask extends AsyncTask<URL, Void, ArrayList<MoviePic>> {
     private String OWM_vote_average="vote_average";
     private String OWM_overview="overview";
     final String OWM_id="id";
-    final String RequestTag_mostPopular="MostPopular";
-    final String RequestTag_HighestRating="HighestRating";
     private String mypicBase;
     private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
     private OnDataFetch onDataFetchListener;

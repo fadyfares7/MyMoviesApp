@@ -44,9 +44,8 @@ public class ListAdapter extends ArrayAdapter<MoviePic> {
 
         if (p != null) {
             ImageView profile = (ImageView) v.findViewById(R.id.movieimageView);
-           //profile.setLayoutParams(new GridView.LayoutParams(500, 500));
             profile.setScaleType(ImageView.ScaleType.FIT_XY);
-          //  profile.setPadding(1,1,1,1);
+
             if (profile != null) {
                 profile.setImageBitmap(p.getMovie_pic());
             }

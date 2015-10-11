@@ -25,7 +25,6 @@
             android:id="@+id/title"
             android:fontFamily="sans-serif-light"
             android:textSize="46sp"
-            android:text="Intersteller"
             android:textColor="@color/white"
            />
     </LinearLayout>
@@ -69,7 +68,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/data"
-                    android:text="2015"
                     android:fontFamily="sans-serif-condensed"
                     android:textSize="36sp"
                     android:textColor="@color/Movies_light_grey"/>
@@ -77,30 +75,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/time"
-                    android:text="120min"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textSize="36sp"
-                    android:textColor="@color/Movies_light_grey" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/rate"
-                    android:text="8.1/10"
                     android:fontFamily="sans-serif-light"
                     android:textSize="22sp"
                     android:textColor="@color/black"/>
-                <!--<ImageButton android:id="@+id/favorite"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="fill_parent"-->
-                    <!--android:src="@drawable/star"-->
-                    <!--android:clickable="true"-->
-                    <!--android:background="#00ffffff"-->
-                  <!--/>-->
+
                 <ToggleButton
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:text="New ToggleButton"
                     android:id="@+id/favorite"
                     android:background="@drawable/star"
                     android:textOn=""
@@ -120,7 +102,6 @@
                 android:id="@+id/overview"
                 android:fontFamily="sans-serif-condensed"
                 android:textSize="22sp"
-                android:text="Intersteller asdasdakmdasmdas;ndlasndlasndklasndlsandas;dk;askdalsnd"
                 android:textColor="@color/Movies_light_grey"/>
 
         </LinearLayout>
@@ -141,7 +122,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:textSize="28sp"
-            android:text="Trailers: "
             android:textColor="@color/Movies_light_grey"
             />
 
@@ -157,7 +137,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:textSize="28sp"
-            android:text="Reviews: "
             android:textColor="@color/Movies_light_grey"
             />
         <LinearLayout
